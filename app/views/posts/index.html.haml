@@ -1,0 +1,6 @@
+.contents.row
+  - @posts.each do |post|
+    .content_post{:style => "background-image: url(#{post.image});"}
+      = simple_format(post.text)
+      %span.name
+        = post.name
