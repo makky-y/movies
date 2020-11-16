@@ -1,1 +1,61 @@
 .main
+.body-parent
+  .left-content
+    %ul.left-content__mypage-lists
+      %li.left-content__mypage
+      = link_to '#', class: 'left-data' do
+        マイページ
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        やることリスト
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        いいね一覧
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        出品する
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        下書き一覧
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        出品した商品 - 出品中
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        出品した商品 - 取引中
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        出品した商品 - 売却済み
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        購入した商品 - 取引中
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        購入した商品 - 過去取引
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        ニュース一覧
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        評価一覧
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        ガイド
+      %li.left-content__list
+      = link_to '#', class: 'left-data' do
+        お問い合わせ
+    .left-content__settings
+      %p 設定
+      %ul.left-content__settings-box
+        %li.left-content__list
+        = link_to '#', class: 'left-data' do
+          プロフィール
+        %li.left-content__list
+        = link_to cards_path, class: 'left-data' do
+          クレジットカード登録
+        %li.left-content__list
+        = link_to '#', class: 'left-data' do
+          メール
+        %li.left-content__logout
+        = link_to destroy_user_session_path, method: :delete, class: 'left-data' do
+          ログアウト
