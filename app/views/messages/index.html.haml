@@ -1,3 +1,105 @@
 .wrapper
   = render "side_bar"
   = render "main"
+  = render "layouts/header"
+.back
+  .show-main
+    .items__name
+      = truncate("#{@item.name}", length:30)
+      .items__photo_main
+        = image_tag @item.item_images.first.url.url, size: "400x400"
+      .itmes__photo__sub
+        - @item.item_images.each do |image|
+          .itmes__photo__sub__img
+            = image_tag image.url.url, size: "100x100"
+    .items__price
+      = "#{@item.price}円"
+    .items__price__sub
+      (税込)送料込み
+    .information
+      = "#{@item.detail}"
+
+    %table{class: 'tbl'}
+      %tr
+        %th{class: 'tbl__left'}
+          出品者
+        %td{class: 'tbl__right'}
+          = "#{@item.user.nickname}"
+      %tr
+        %th{class: 'tbl__left'}
+          カテゴリー
+        %td{class: 'tbl__right'}
+          = link_to "#{@item.category.parent.parent.name}", '#', class:'tbl__link'
+          %br/
+          = link_to "#{@item.category.parent.name}", '#', class:'tbl__link'
+          %br/
+          = link_to "#{@item.category.name}", '#', class:'tbl__link'
+      %tr
+        %th{class: 'tbl__left'}
+          ブランド
+        %td{class: 'tbl__right'}
+          = "#{@item.brand}"
+      %tr
+        %th{class: 'tbl__left'}
+          商品の状態
+        %td{class: 'tbl__right'}
+          = "#{@item.item_status}"
+      %tr
+        %th{class: 'tbl__left'}
+          送料
+        %td{class: 'tbl__right'}
+          = "#{@item.shipping_fee}"
+      %tr
+        %th{class: 'tbl__left'}
+          発送元の地域
+        %td{class: 'tbl__right'}
+          = "#{@item.prefecture.name}"
+      %tr
+        %th{class: 'tbl__left'}
+          発送日の目安
+        %td{class: 'tbl__right'}
+          = "#{@item.days_until_shipping}日以内に発送"
+
+    .option
+      %ul= link_to '★ お気に入り 0', '#', class:'favorite'
+      %ul
+        = link_to '#', class:'bad' do
+          = icon('fas', 'flag')
+          不適切な商品の通報
+
+  .cmt
+    = form_for('#') do |f|
+      %textarea{required:'required', name:'comment', class:'cmt__form'}
+      .comment__msg
+        相手のことを考え丁寧なコメントを心がけましょう。
+        %br/
+        不快な言葉遣いなどは利用制限や退会処分となることがあります。
+      %button{type: "submit", class:'cmt__send'}
+        %i.fas.fa-comment
+        コメントする
+    .show__btn
+      - if user_signed_in?
+        - if @item.purchaser_id.present?
+          .show__btn__sout
+            = '売り切れです'
+        - else
+          - if @item.user_id == current_user.id
+            = link_to edit_item_path(@item), class:'show__btn__link' do
+              = '商品情報編集'
+            = link_to item_path(@item), method: :delete, class:'show__btn__link' do
+              = '商品情報削除'
+          - else
+            = link_to buy_confirm_card_path, class:'show__btn__link' do
+              = '購入画面へ'
+      - else
+        = link_to buy_confirm_card_path, class:'show__btn__link' do
+          = '購入画面へ'
+  .page
+    %ul=link_to '< 前の商品', '#', class:'page__prev'
+    %ul=link_to '後ろの商品 >', '#', class:'page__next'
+
+  .more
+    %ul=link_to 'ベビー・キッズをもっと見る', '#', class:'more__list'
+    .more__img
+      画像
+= render "layouts/footer"
