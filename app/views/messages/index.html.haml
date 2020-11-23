@@ -1,105 +1,185 @@
-.wrapper
-  = render "side_bar"
-  = render "main"
-  = render "layouts/header"
-.back
-  .show-main
-    .items__name
-      = truncate("#{@item.name}", length:30)
-      .items__photo_main
-        = image_tag @item.item_images.first.url.url, size: "400x400"
-      .itmes__photo__sub
-        - @item.item_images.each do |image|
-          .itmes__photo__sub__img
-            = image_tag image.url.url, size: "100x100"
-    .items__price
-      = "#{@item.price}円"
-    .items__price__sub
-      (税込)送料込み
-    .information
-      = "#{@item.detail}"
+// 商品詳細ページ
 
-    %table{class: 'tbl'}
-      %tr
-        %th{class: 'tbl__left'}
-          出品者
-        %td{class: 'tbl__right'}
-          = "#{@item.user.nickname}"
-      %tr
-        %th{class: 'tbl__left'}
-          カテゴリー
-        %td{class: 'tbl__right'}
-          = link_to "#{@item.category.parent.parent.name}", '#', class:'tbl__link'
-          %br/
-          = link_to "#{@item.category.parent.name}", '#', class:'tbl__link'
-          %br/
-          = link_to "#{@item.category.name}", '#', class:'tbl__link'
-      %tr
-        %th{class: 'tbl__left'}
-          ブランド
-        %td{class: 'tbl__right'}
-          = "#{@item.brand}"
-      %tr
-        %th{class: 'tbl__left'}
-          商品の状態
-        %td{class: 'tbl__right'}
-          = "#{@item.item_status}"
-      %tr
-        %th{class: 'tbl__left'}
-          送料
-        %td{class: 'tbl__right'}
-          = "#{@item.shipping_fee}"
-      %tr
-        %th{class: 'tbl__left'}
-          発送元の地域
-        %td{class: 'tbl__right'}
-          = "#{@item.prefecture.name}"
-      %tr
-        %th{class: 'tbl__left'}
-          発送日の目安
-        %td{class: 'tbl__right'}
-          = "#{@item.days_until_shipping}日以内に発送"
 
-    .option
-      %ul= link_to '★ お気に入り 0', '#', class:'favorite'
-      %ul
-        = link_to '#', class:'bad' do
-          = icon('fas', 'flag')
-          不適切な商品の通報
+$imgColor: lightblue;
 
-  .cmt
-    = form_for('#') do |f|
-      %textarea{required:'required', name:'comment', class:'cmt__form'}
-      .comment__msg
-        相手のことを考え丁寧なコメントを心がけましょう。
-        %br/
-        不快な言葉遣いなどは利用制限や退会処分となることがあります。
-      %button{type: "submit", class:'cmt__send'}
-        %i.fas.fa-comment
-        コメントする
-    .show__btn
-      - if user_signed_in?
-        - if @item.purchaser_id.present?
-          .show__btn__sout
-            = '売り切れです'
-        - else
-          - if @item.user_id == current_user.id
-            = link_to edit_item_path(@item), class:'show__btn__link' do
-              = '商品情報編集'
-            = link_to item_path(@item), method: :delete, class:'show__btn__link' do
-              = '商品情報削除'
-          - else
-            = link_to buy_confirm_card_path, class:'show__btn__link' do
-              = '購入画面へ'
-      - else
-        = link_to buy_confirm_card_path, class:'show__btn__link' do
-          = '購入画面へ'
-  .page
-    %ul=link_to '< 前の商品', '#', class:'page__prev'
-    %ul=link_to '後ろの商品 >', '#', class:'page__next'
 
-  .more
-    %ul=link_to 'ベビー・キッズをもっと見る', '#', class:'more__list'
-    .more__img
-      画像
-= render "layouts/footer"
+.back {
+  background: $gray_white;
+  padding: 40px;
+  
+  .show-main {
+    background-color: $white;
+    width: 700px;
+    margin: 10px auto;
+    text-align: center;
+    padding: 24px 40px 40px;
+  
+    .items__name {
+      font-weight: bold;
+      font-size: 24px;
+    }
+  
+    .items__photo_main {
+      margin: 30px auto;
+      font-weight: bold;
+    }
+  
+    .itmes__photo__sub {
+      display: flex;
+      
+      &__img {
+      margin: auto;
+    }
+  }
+  
+    .items__price {
+      font-size: 40px;
+      font-weight: bold;
+    }
+  
+    .information {
+      min-height: 150px;
+      width: 620px;
+      font-size: 18px;
+      margin: 30px 0 30px;
+    }
+  
+    .tbl {
+      width: 100%;
+      height: 375px;
+      border-collapse: collapse;
+      border: 1px solid $gray_white;
+      margin-bottom: 40px;
+  
+      &__left {
+        background-color: #eee;
+        font-weight: 400;
+        width: 25%;
+        border: 1px solid #dedede;
+        font-size: 14px;
+        text-align: center;
+        }
+  
+      &__right {
+        border: 1px solid #dedede;
+        font-size: 14px;
+        text-align: left;
+        padding-left: 10px;
+      }
+  
+      &__link {
+        text-align: none;
+        color: $skyblue;
+        text-decoration: none;
+      }
+      }
+    
+    .option {
+      display: flex;
+      list-style-type: none;
+      justify-content: space-between;
+  
+      .favorite {
+        margin-right: auto;
+        padding: 10px 10px;
+        border-radius: 40px;
+        color: $skyblue;
+        border: 1px solid #ffb340;
+        text-decoration: none;
+      }
+  
+      .bad {
+        padding: 10px 10px;
+        border-radius:4px;
+        color: #333;
+        border: 1px solid #333;
+        text-decoration: none;
+      }
+    }
+  }
+  
+  .cmt {
+    background-color: $white;
+    width: 700px;
+    margin: 10px auto;
+    padding: 24px 40px 40px;
+    text-align: center;
+  
+    &__form {
+      width: 642px;
+      height: 104px;
+    }
+  
+    &__msg {
+      padding: 8px;
+      font-size: 14px;
+      background-color: $gray_white;
+      margin: 10px 0;
+      text-align: left;
+    }
+  
+    &__send {
+      line-height: 48px;
+      background: $skyblue;
+      border: 1px solid $skyblue;
+      color: $white;
+      width: 60%;
+      font-size: 18px;
+      border-radius: 100px;
+      margin-top: 20px;
+    }
+  }
+
+  .show__btn {
+    margin-top: 80px;
+
+    &__sout {
+      color: red;
+      font-size: 20px;
+    }
+
+    &__link {
+      padding: 20px 60px;
+      background: #ea352d;
+      color: $white;
+      border-radius: 100px;
+      text-decoration: none;
+    }
+  }
+
+  .page {
+    display: flex;
+    justify-content: space-between;
+    text-decoration: none;
+    margin: 10px 30px 0 30px;
+  
+    &__prev {
+      color: $skyblue;
+      text-decoration: none;
+    }
+
+    &__next {
+      color: $skyblue;
+      text-decoration: none;
+    }
+  }
+
+  .more {
+    margin: 40px 30px 0 30px;
+
+    &__list {
+      color: $skyblue;
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    &__img {
+      height: 200px;
+      width: 200px;
+      background-color: $imgColor;
+      margin-top: 20px;
+    }
+  }
+}
