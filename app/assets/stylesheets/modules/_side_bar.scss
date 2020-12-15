@@ -1,3 +1,120 @@
 * {
   box-sizing: border-box;
 }
+.saide_main
+= render "layouts/header"
+
+.new-main 
+  .parent-box
+    = form_for [@item] do |f|
+      .first-box
+        .image-box
+          .image-box__sample
+            %p 出品画像
+          .image-box__mandatory
+            %p 必須
+        .advice-box
+          %p 画像をアップロードできます 
+        .image-area       
+          #image-box     
+            #previews
+              - if @item.persisted?
+                - @item.item_images.each_with_index do |image, i|
+                  .preview-box
+                    = image_tag image.url.url, data: { index: i }, width: "100", height: "100", class: 'preview__image'
+                    .preview-text
+                      .preview__edit{ data: { index: i }}
+                        編集
+                      .preview__delete.js-remove{ data: { index: i }}
+                        削除
+            #image-field
+              ここをクリックして画像をアップロード
+              = f.fields_for :item_images do |i|
+                .js-file_group{ data: { index: i.index }}
+                  = i.file_field :url, class: "js-file", data:{ index: i.index }
+      .second-box 
+        .item-name
+          .item-name__sample
+            %p 商品名
+          .item-name__mandatory
+            %p 必須
+        .item-title
+          = f.text_field :name, placeholder: '40字まで'
+        .item-explanation
+          .item-explanation__sample
+            %p 商品の説明
+          .item-explanation__mandatory
+            %p 必須
+        .explanation-text
+          = f.text_area :detail, placeholder: '商品の説明'
+
+      .third-box
+        .third-box__title
+          %p 商品の詳細
+        .item-detail__category
+          = f.label 'カテゴリー', class: 'item-default__label'
+          .item-default--require 必須
+          .item-select-wrapper
+            .item-select-wrapper__box
+              = f.select :category_id, @category_parent_array, {}, {class: 'item-select-wrapper__box--select', id: 'parent_category'}
+        .item-brand
+          .item-brand__sample
+            %p ブランド
+          .item-brand__optional
+            %p 任意
+        .brand-title
+          = f.text_field :brand, placeholder: 'ブランド名: (例)シャネル'
+        .item-status
+          .item-status__sample
+            %p 商品の状態
+          .item-status__mandatory
+            %p 必須
+        .item-status__select
+          = f.select :item_status, {'新品同様': "新品同様", '多少の傷あり': "新品同様"}, include_blank: "選択してください"
+
+      .fourth-box
+        .fourth-box__title
+          %p 配送について
+        .shipping-fee
+          .shipping-fee__sample
+            %p 配送料の負担
+          .shipping-fee__mandatory
+            %p 必須
+        .shipping-fee__select
+          = f.select :shipping_fee, {'送料込み(出品者負担)': '送料込み(出品者負担)', '着払い(購入者負担)': '送料込み(出品者負担)'}, include_blank: "選択してください"
+        .shipping-region
+          .shipping-region__sample
+            %p 発送元の地域
+          .shipping-region__mandatory
+            %p 必須
+        .shipping-region__text       
+          = f.collection_select :prefecture_id, Prefecture.all, :id, :name, autofocus: true, autocomplete: 'address-level1'
+        .until-shipping
+          .until-shipping__sample
+            %p 発送までの日数 (例)3日以内に発送
+          .until-shipping__mandatory
+            %p 必須
+        .until-shipping__select
+          .select
+            = f.text_field :days_until_shipping, placeholder: '半角整数1桁'
+          .text
+            = "日以内に発送"
+
+      .fifth-box
+        .standard-price
+          %p 価格(300 ~ 9,999,999円)
+        .price-box
+          .price-box__sample
+            .price-box__sample-other
+              %p 販売価格
+            .price-box__mandatory
+              %p 必須
+          .price-box__text
+            = f.text_field :price, placeholder: '半角数字'
+          .yen
+            = "円"
+      %br/
+      .items-submit-btn
+        = f.submit '出品する', class: "form-container__contents--btn"
+        
+= render "layouts/footer"
